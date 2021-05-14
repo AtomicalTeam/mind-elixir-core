@@ -4,7 +4,7 @@ export default function (mind, option) {
   let createTips = words => {
     let div = document.createElement('div')
     div.innerHTML = words
-    div.style.cssText= 'position:absolute;bottom:20px;left:50%;transform:translateX(-50%);'
+    div.style.cssText = 'position:absolute;bottom:20px;left:50%;transform:translateX(-50%);'
     return div
   }
   let createLi = (id, name, keyname) => {
@@ -90,14 +90,14 @@ export default function (mind, option) {
         menuUl.style.bottom = '0px'
       } else {
         menuUl.style.bottom = ''
-        menuUl.style.top = e.clientY + 15 + 'px'
+        menuUl.style.top = (e.clientY - menuUl.getBoundingClientRect().y) + 30 + 'px'
       }
       if (width + e.clientX > window.innerWidth) {
         menuUl.style.left = ''
         menuUl.style.right = '0px'
       } else {
         menuUl.style.right = ''
-        menuUl.style.left = e.clientX + 10 + 'px'
+        menuUl.style.left = (e.clientX - menuUl.getBoundingClientRect().x) + 10 + 'px'
       }
     }
   }
