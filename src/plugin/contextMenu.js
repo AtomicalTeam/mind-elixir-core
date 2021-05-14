@@ -85,19 +85,28 @@ export default function (mind, option) {
       menuContainer.hidden = false
       let height = menuUl.offsetHeight
       let width = menuUl.offsetWidth
+
+      // let result = "";
+      // result += "<!-- "
+      // result += `${e.clientX} ${mind.container.getBoundingClientRect().x} ${e.clientY} ${mind.container.getBoundingClientRect().y}\n`
+      // result += `${height} ${width}\n`
+      // e.path = html body div div div div div div div div div div div root tpc
+      //result += "-->"
+      //menuUl.innerHTML += result;
+
       if (height + e.clientY > window.innerHeight) {
         menuUl.style.top = ''
         menuUl.style.bottom = '0px'
       } else {
         menuUl.style.bottom = ''
-        menuUl.style.top = (e.clientY - menuUl.getBoundingClientRect().y) + 30 + 'px'
+        menuUl.style.top = (e.clientY - mind.container.getBoundingClientRect().y) + 30 + 'px'
       }
       if (width + e.clientX > window.innerWidth) {
         menuUl.style.left = ''
         menuUl.style.right = '0px'
       } else {
         menuUl.style.right = ''
-        menuUl.style.left = (e.clientX - menuUl.getBoundingClientRect().x) + 10 + 'px'
+        menuUl.style.left = (e.clientX - mind.container.getBoundingClientRect().x) + 10 + 'px'
       }
     }
   }
