@@ -189,6 +189,9 @@ export function createChildren(data, first, direction) {
 }
 
 // Set primary nodes' direction and invoke createChildren()
+/**
+ * Edit this.root
+ */
 export function layout() {
   console.time('layout')
   this.root.innerHTML = ''

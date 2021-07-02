@@ -391,6 +391,13 @@ MindElixir.prototype = {
     this.linkDiv()
     if (!this.overflowHidden) initMouseEvent(this)
   },
+  /** Will internally ensure that we use a copy of the object */
+  loadJSON: function (jsonObject) {
+    this.nodeData = JSON.parse(JSON.stringify(jsonObject));
+    addParentLink(this.nodeData);
+    this.layout();
+    this.linkDiv();
+  }
 }
 // MindElixir.exportSvg = exportSvg
 // MindElixir.exportPng = exportPng
