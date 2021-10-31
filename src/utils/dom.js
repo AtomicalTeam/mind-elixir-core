@@ -78,12 +78,35 @@ export function selectText(div) {
   }
 }
 
+
+// ! Raw copy of jsontomarkdown.ts
+
+function HtmlToMarkdown(text) {
+  // replace bold and italic
+  const boldItalicRegex = /<b><i>(?<boldItalic>.+)<\/i><\/b>/g;
+  const boldItalicMarkdown = '***$<boldItalic>***';
+  text = text.replace(boldItalicRegex, boldItalicMarkdown);
+  // replace bold
+  const boldRegex = /<b>(?<bold>.+)<\/b>/g;
+  const boldMarkdown = '**$<bold>**';
+  text = text.replace(boldRegex, boldMarkdown);
+  // replace italic
+  const italicRegex = /<i>(?<italic>.+)<\/i>/g;
+  const italicMarkdown = '*$<italic>*';
+  text = text.replace(italicRegex, italicMarkdown);
+  // replace mark
+  const markRegex = /<mark>(?<mark>.+)<\/mark>/g;
+  const markMarkdown = '==$<mark>==';
+  text = text.replace(markRegex, markMarkdown);
+
+  return text;
+}
+
 export function createInputDiv(tpc) {
   console.time('createInputDiv')
   if (!tpc) return
   let div = $d.createElement('div')
-  let origin = tpc.childNodes[0].textContent
-  tpc.appendChild(div)
+  let origin = HtmlToMarkdown(tpc.innerHTML)// tpc.childNodes[0].textContent
   div.innerHTML = origin
   div.contentEditable = true
   div.spellcheck = false
