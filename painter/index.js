@@ -77,19 +77,16 @@ function RootToSvg() {
 
   let svg2ndEle = $d.querySelector('.svg2nd')
 
-  let svg2nd = `<g transform="translate(${IMG_PADDING - maxLeft}, ${
-    IMG_PADDING - maxTop
-  })">${svg2ndEle.innerHTML}</g>`
+  let svg2nd = `<g transform="translate(${IMG_PADDING - maxLeft}, ${IMG_PADDING - maxTop
+    })">${svg2ndEle.innerHTML}</g>`
+  console.log('Hello')
   return (
     svg2nd +
-    `<g id="root" transform="translate(${rootOffsetX + IMG_PADDING}, ${
-      rootOffsetY + IMG_PADDING
+    `<g id="root" transform="translate(${rootOffsetX + IMG_PADDING}, ${rootOffsetY + IMG_PADDING
     })">
-      <rect x="${left}" y="${top}" rx="5px" ry="5px" width="${
-      rect.width
+      <rect x="${left}" y="${top}" rx="5px" ry="5px" width="${rect.width
     }" height="${rect.height}" style="fill: #00aaff;"></rect>
-      <text x="${left + 15}" y="${
-      top + 35
+      <text x="${left + 15}" y="${top + 35
     }" text-anchor="start" align="top" anchor="start" font-family="微软雅黑" font-size="25px" font-weight="normal" fill="#ffffff">
         ${nodeObj.topic}
       </text>
@@ -104,9 +101,8 @@ function PrimaryToSvg(primaryNode) {
 
   let svg = ''
   let svg3rd = primaryNode.querySelector('.svg3rd')
-  svg += `<g transform="translate(${primaryNodeOffsetX + IMG_PADDING}, ${
-    primaryNodeOffsetY + IMG_PADDING
-  })">`
+  svg += `<g transform="translate(${primaryNodeOffsetX + IMG_PADDING}, ${primaryNodeOffsetY + IMG_PADDING
+    })">`
   svg += svg3rd ? svg3rd.innerHTML : ''
   for (let i = 0; i < topics.length; i++) {
     let tpc = topics[i]
@@ -130,19 +126,15 @@ function PrimaryToSvg(primaryNode) {
     // style render
     let border = ''
     if (tpcStyle.borderWidth != '0px') {
-      border = `<rect x="${left + 15}" y="${top}" rx="5px" ry="5px" width="${
-        tpcRect.width
-      }" height="${
-        tpcRect.height
-      }" style="fill: rgba(0,0,0,0); stroke:#444;stroke-width:1px;"></rect>`
+      border = `<rect x="${left + 15}" y="${top}" rx="5px" ry="5px" width="${tpcRect.width
+        }" height="${tpcRect.height
+        }" style="fill: rgba(0,0,0,0); stroke:#444;stroke-width:1px;"></rect>`
     }
     let backgroundColor = ''
     if (tpcStyle.backgroundColor != 'rgba(0, 0, 0, 0)') {
-      backgroundColor = `<rect x="${
-        left + 15
-      }" y="${top}" rx="5px" ry="5px" width="${tpcRect.width}" height="${
-        tpcRect.height
-      }" style="fill: ${tpcStyle.backgroundColor};"></rect>`
+      backgroundColor = `<rect x="${left + 15
+        }" y="${top}" rx="5px" ry="5px" width="${tpcRect.width}" height="${tpcRect.height
+        }" style="fill: ${tpcStyle.backgroundColor};"></rect>`
     }
     // render tags
     let tags = ''
@@ -151,14 +143,11 @@ function PrimaryToSvg(primaryNode) {
       for (let i = 0; i < tagsEle.length; i++) {
         let tag = tagsEle[i]
         let tagRect = tag.getBoundingClientRect()
-        tags += `<rect x="${topicOffsetLeft}" y="${
-          topicOffsetTop + 4
-        }" rx="5px" ry="5px" width="${tagRect.width}" height="${
-          tagRect.height
-        }" style="fill: #d6f0f8;"></rect>
-        <text font-family="微软雅黑" font-size="12px"  fill="#276f86" x="${
-          topicOffsetLeft + 4
-        }" y="${topicOffsetTop + 4 + 12}">${tag.innerHTML}</text>`
+        tags += `<rect x="${topicOffsetLeft}" y="${topicOffsetTop + 4
+          }" rx="5px" ry="5px" width="${tagRect.width}" height="${tagRect.height
+          }" style="fill: #d6f0f8;"></rect>
+        <text font-family="微软雅黑" font-size="12px"  fill="#276f86" x="${topicOffsetLeft + 4
+          }" y="${topicOffsetTop + 4 + 12}">${tag.innerHTML}</text>`
       }
     }
     let icons = ''
@@ -239,7 +228,7 @@ function customLinkTransform() {
 }
 
 export let exportSvg = function (instance, fileName) {
-  if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)') 
+  if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)')
   initVar()
   $d = instance.container
   let svgFile = generateSvgDom()
@@ -253,7 +242,7 @@ export let exportSvg = function (instance, fileName) {
 }
 
 export let exportPng = async function (instance, fileName) {
-  if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)') 
+  if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)')
   initVar()
   $d = instance.container
   let svgFile = generateSvgDom()
