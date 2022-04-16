@@ -51,7 +51,6 @@ import MindElixir, { E } from 'mind-elixir'
 #### Script tag
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/regenerator-runtime"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-elixir/dist/mind-elixir.js"></script>
 ```
 
@@ -70,13 +69,16 @@ import MindElixir, { E } from 'mind-elixir'
 ### Init
 
 ```javascript
+import MindElixir, { E } from 'mind-elixir'
+import { exportSvg, exportPng } from '../dist/painter'
+import example from '../dist/example1'
+
 let options = {
   el: '#map',
   direction: MindElixir.LEFT,
   // create new map data
-  data: MindElixir.new('new topic'),
+  data: MindElixir.new('new topic') or example,
   // the data return from `.getAllData()`
-  data: {...},
   draggable: true, // default true
   contextMenu: true, // default true
   toolBar: true, // default true
@@ -130,6 +132,7 @@ E('node-id')
   parent: null,
   tags: ['Tag'],
   icons: ['😀'],
+  hyperLink: 'https://github.com/ssshooter/mind-elixir-core',
 }
 ```
 
@@ -149,8 +152,13 @@ mind.bus.addListener('operation', operation => {
   // name: moveNode
   // obj: {from:target1,to:target2}
 })
+
 mind.bus.addListener('selectNode', node => {
   console.log(node)
+})
+
+mind.bus.addListener('expandNode', node => {
+  console.log('expandNode: ', node)
 })
 ```
 
@@ -163,6 +171,8 @@ mind.getAllDataMd() // markdown
 ```
 
 ### Export as image
+
+**WIP**
 
 ```javascript
 import painter from 'mind-elixir/dist/painter'

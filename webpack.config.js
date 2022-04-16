@@ -1,13 +1,24 @@
 const path = require('path')
-const webpack = require('webpack')
+// const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+const TerserPlugin = require('terser-webpack-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin
 
 let config = {
+  resolve: {
+    // Add `.ts` and `.tsx` as a resolvable extension.
+    extensions: ['.ts', '.tsx', '.js'],
+  },
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'ts-loader',
+        },
+      },
       {
         test: /\.less$/,
         use: ['style-loader', 'css-loader', 'less-loader'],
@@ -33,10 +44,10 @@ let config = {
 
 module.exports = (env, argv) => {
   if (argv.mode === 'development') {
-    console.log('development')
+    console.log('development', env)
     config = {
       ...config,
-      entry: './src/dev.js',
+      entry: env.dist !== '0' ? './src/dev.dist.js' : './src/dev.ts',
       plugins: [
         new HtmlWebpackPlugin({
           title: 'MindElixir',
@@ -45,84 +56,43 @@ module.exports = (env, argv) => {
       ],
     }
   }
-  if (argv.mode === 'production' && !env.lite) {
+  if (argv.mode === 'production') {
     console.log('production')
     config = {
       ...config,
       entry: {
-        MindElixir: './src/index.js',
-        painter: './painter/index.js'
+        MindElixir: './src/index.ts',
+        MindElixirLite: './src/index.lite.ts',
+        painter: './painter/index.js',
+        example1: './src/exampleData/1.js',
+        example2: './src/exampleData/2.js',
       },
       output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
         library: '[name]',
         libraryTarget: 'umd',
-        libraryExport: 'default'
-        // libraryTarget: 'window'
-      },
-      module: {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                presets: ['@babel/preset-env']
-              }
-            }
-          },
-          {
-            test: /\.less$/,
-            use: ['style-loader', 'css-loader', 'less-loader'],
-          },
-          {
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader'],
-          },
-          {
-            test: /\.(ttf|woff|woff2|eot|svg)$/i,
-            use: [
-              {
-                loader: 'url-loader',
-                options: {
-                  limit: 8192,
-                },
-              },
-            ],
-          },
-        ]
+        libraryExport: 'default',
       },
       // plugins: [
       //   new BundleAnalyzerPlugin()
       // ],
       optimization: {
-        minimizer: [new UglifyJsPlugin({
-          uglifyOptions: {
-            compress: {
-              drop_console: true,
-            }
-          },
-        })],
+        minimize: true,
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              compress: {
+                drop_console: true,
+              },
+            },
+          }),
+        ],
       },
-    }
-  }
-  if (argv.mode === 'production' && env.lite) {
-    console.log('lite')
-    config = {
-      ...config,
-      entry: './src/core-lite.js',
-      output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'mind-elixir-lite.js',
-        library: 'MindElixir',
-        libraryTarget: 'umd',
-      },
-      plugins: [new webpack.optimize.ModuleConcatenationPlugin()],// scope hoist
     }
   }
 
+  // plugins: [new webpack.optimize.ModuleConcatenationPlugin()], // scope hoist
 
   return config
 }
