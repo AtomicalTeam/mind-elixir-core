@@ -21,7 +21,7 @@ export const findEle = (id: string, instance?) => {
 }
 
 export const shapeTpc = function(tpc: Topic, nodeObj: NodeObj) {
-  tpc.innerText = nodeObj.topic
+  tpc.innerHTML = nodeObj.topic
 
   if (nodeObj.style) {
     tpc.style.color = nodeObj.style.color || 'inherit'

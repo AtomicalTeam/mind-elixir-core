@@ -1,7 +1,8 @@
 import Canvg from 'canvg'
+import { generateImage } from './imageAdapter'
 
-let head = `<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">`
-let IMG_PADDING = 40
+const head = `<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">`
+const IMG_PADDING = 40
 let $d = document
 let maxTop, maxBottom, maxLeft, maxRight, svgHeight, svgWidth
 
@@ -15,17 +16,17 @@ function initVar() {
 }
 
 function generateSvgDom() {
-  let primaryNodes = $d.querySelectorAll('.box > grp, root')
+  const primaryNodes = $d.querySelectorAll('.box > grp, root')
   let svgContent = ''
   // calculate distance to center from top, left, bottom, right
   for (let i = 0; i < primaryNodes.length; i++) {
-    let primaryNode = primaryNodes[i]
-    let rect = primaryNode.getBoundingClientRect()
-    let top = primaryNode.offsetTop
-    let bottom = top + rect.height
-    let left = primaryNode.offsetLeft
-    let right = left + rect.width
-    
+    const primaryNode = primaryNodes[i]
+    const rect = primaryNode.getBoundingClientRect()
+    const top = primaryNode.offsetTop
+    const bottom = top + rect.height
+    const left = primaryNode.offsetLeft
+    const right = left + rect.width
+
     if (top < maxTop) {
       maxTop = top
     }
@@ -38,20 +39,20 @@ function generateSvgDom() {
     if (right > maxRight) {
       maxRight = right
     }
-  } 
-  
+  }
+
   for (let i = 0; i < primaryNodes.length; i++) {
-    let primaryNode = primaryNodes[i]
-    if(primaryNode.tagName === 'ROOT') continue
+    const primaryNode = primaryNodes[i]
+    if (primaryNode.tagName === 'ROOT') continue
     svgContent += PrimaryToSvg(primaryNode)
   }
   console.log(maxTop, maxBottom, maxLeft, maxRight)
   svgContent += RootToSvg()
   // image margin
-  svgHeight = maxBottom - maxTop + IMG_PADDING * 2
-  svgWidth = maxRight - maxLeft + IMG_PADDING * 2
+  svgHeight = maxBottom - maxTop + IMG_PADDING * 2 * 2
+  svgWidth = maxRight - maxLeft + IMG_PADDING * 2 * 2
   // svgContent += customLinkTransform()
-  let svgFile = createSvg(svgHeight, svgWidth)
+  const svgFile = createSvg(svgHeight, svgWidth)
   svgContent =
     `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="#f6f6f6"></rect>` +
     svgContent
@@ -61,7 +62,7 @@ function generateSvgDom() {
 }
 
 function createSvg(height, width) {
-  let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   svg.setAttribute('height', height)
   svg.setAttribute('width', width)
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
@@ -71,19 +72,19 @@ function createSvg(height, width) {
 }
 
 function RootToSvg() {
-  let root = $d.querySelector('root')
-  let rootTpc = $d.querySelector('root > tpc')
-  let rect = rootTpc.getBoundingClientRect()
-  let top = 0
-  let left = 0
-  let nodeObj = $d.querySelector('root > tpc').nodeObj
-  let rootOffsetY = root.offsetTop - maxTop
-  let rootOffsetX = root.offsetLeft - maxLeft
+  const root = $d.querySelector('root')
+  const rootTpc = $d.querySelector('root > tpc')
+  const rect = rootTpc.getBoundingClientRect()
+  const top = 0
+  const left = 0
+  const nodeObj = $d.querySelector('root > tpc').nodeObj
+  const rootOffsetY = root.offsetTop - maxTop
+  const rootOffsetX = root.offsetLeft - maxLeft
 
-  let svg2ndEle = $d.querySelector('.svg2nd')
+  const svg2ndEle = $d.querySelector('.svg2nd')
 
-  let svg2nd = `<g transform="translate(${IMG_PADDING - maxLeft}, ${IMG_PADDING - maxTop
-    })">${svg2ndEle.innerHTML}</g>`
+  const svg2nd = `<g transform="translate(${IMG_PADDING - maxLeft}, ${IMG_PADDING - maxTop
+  })">${svg2ndEle.innerHTML}</g>`
   console.log('Hello')
   return (
     svg2nd +
@@ -100,72 +101,83 @@ function RootToSvg() {
 }
 
 function PrimaryToSvg(primaryNode) {
-  let topics = primaryNode.querySelectorAll('tpc')
-  let primaryNodeOffsetY = primaryNode.offsetTop - maxTop
-  let primaryNodeOffsetX = primaryNode.offsetLeft - maxLeft
+  const topics = primaryNode.querySelectorAll('tpc')
+  const primaryNodeOffsetY = primaryNode.offsetTop - maxTop
+  const primaryNodeOffsetX = primaryNode.offsetLeft - maxLeft
 
   let svg = ''
-  let svg3rd = primaryNode.querySelector('.svg3rd')
+  const svg3rd = primaryNode.querySelector('.svg3rd')
   svg += `<g transform="translate(${primaryNodeOffsetX + IMG_PADDING}, ${primaryNodeOffsetY + IMG_PADDING
-    })">`
+  })">`
   svg += svg3rd ? svg3rd.innerHTML : ''
   for (let i = 0; i < topics.length; i++) {
-    let tpc = topics[i]
-    let t = tpc.parentNode
-    let nodeObj = tpc.nodeObj
+    const tpc = topics[i]
+    const t = tpc.parentNode
+    const nodeObj = tpc.nodeObj
     if (nodeObj.root) {
       continue
     }
-    let tpcRect = tpc.getBoundingClientRect()
-    let top = t.offsetTop
-    let left = t.offsetLeft
-    let tpcStyle = getComputedStyle(tpc)
-    let tStyle = getComputedStyle(t)
-    let topicOffsetLeft =
+    const tpcRect = tpc.getBoundingClientRect()
+    const top = t.offsetTop
+    const left = t.offsetLeft
+    const tpcStyle = getComputedStyle(tpc)
+    const tStyle = getComputedStyle(t)
+    const topicOffsetLeft =
       left + parseInt(tStyle.paddingLeft) + parseInt(tpcStyle.paddingLeft)
-    let topicOffsetTop =
+    const topicOffsetTop =
       top +
       parseInt(tStyle.paddingTop) +
       parseInt(tpcStyle.paddingTop) +
       parseInt(tpcStyle.fontSize)
     // style render
     let border = ''
-    if (tpcStyle.borderWidth != '0px') {
+    if (tpcStyle.borderWidth !== '0px') {
       border = `<rect x="${left + 15}" y="${top}" rx="5px" ry="5px" width="${tpcRect.width
-        }" height="${tpcRect.height
-        }" style="fill: rgba(0,0,0,0); stroke:#444;stroke-width:1px;"></rect>`
+      }" height="${tpcRect.height
+      }" style="fill: rgba(0,0,0,0); stroke:#444;stroke-width:1px;"></rect>`
     }
     let backgroundColor = ''
-    if (tpcStyle.backgroundColor != 'rgba(0, 0, 0, 0)') {
+    if (tpcStyle.backgroundColor !== 'rgba(0, 0, 0, 0)') {
       backgroundColor = `<rect x="${left + 15
-        }" y="${top}" rx="5px" ry="5px" width="${tpcRect.width}" height="${tpcRect.height
-        }" style="fill: ${tpcStyle.backgroundColor};"></rect>`
+      }" y="${top}" rx="5px" ry="5px" width="${tpcRect.width}" height="${tpcRect.height
+      }" style="fill: ${tpcStyle.backgroundColor};"></rect>`
     }
     // render tags
     let tags = ''
     if (nodeObj.tags && nodeObj.tags.length) {
-      let tagsEle = tpc.querySelectorAll('.tags > span')
+      const tagsEle = tpc.querySelectorAll('.tags > span')
       for (let i = 0; i < tagsEle.length; i++) {
-        let tag = tagsEle[i]
-        let tagRect = tag.getBoundingClientRect()
+        const tag = tagsEle[i]
+        const tagRect = tag.getBoundingClientRect()
+
         tags += `<rect x="${topicOffsetLeft}" y="${topicOffsetTop + 4
-          }" rx="5px" ry="5px" width="${tagRect.width}" height="${tagRect.height
-          }" style="fill: #d6f0f8;"></rect>
+        }" rx="5px" ry="5px" width="${tagRect.width}" height="${tagRect.height
+        }" style="fill: #d6f0f8;"></rect>
         <text font-family="微软雅黑" font-size="12px"  fill="#276f86" x="${topicOffsetLeft + 4
-          }" y="${topicOffsetTop + 4 + 12}">${tag.innerHTML}</text>`
+}" y="${topicOffsetTop + 4 + 12}">${tag.innerHTML}</text>`
       }
     }
     let icons = ''
     if (nodeObj.icons && nodeObj.icons.length) {
-      let iconsEle = tpc.querySelectorAll('.icons > span')
+      const iconsEle = tpc.querySelectorAll('.icons > span')
       for (let i = 0; i < iconsEle.length; i++) {
-        let icon = iconsEle[i]
-        let iconRect = icon.getBoundingClientRect()
+        const icon = iconsEle[i]
+        // const iconRect = icon.getBoundingClientRect()
         icons += `
         <tspan>${icon.innerHTML}</tspan>`
       }
     }
-    svg += `<g id="${nodeObj.id}">
+    if (nodeObj.topic.includes('<img')) {
+      svg += `<g id="${nodeObj.id}">
+      ${border}
+      ${backgroundColor}
+      ${generateImage(nodeObj.topic, topicOffsetLeft, topicOffsetTop)}
+      ${icons}
+      ${tags}
+      </g>`
+      // \<-- ${nodeObj.id} ${border} ${backgroundColor} ${nodeObj.topic} ${icons} ${tags}} --\>
+    } else {
+      svg += `<g id="${nodeObj.id}">
       ${border}
       ${backgroundColor}
       <text x="${topicOffsetLeft}" y="${topicOffsetTop}" text-anchor="start" align="top" anchor="start" font-family="微软雅黑" font-size="${tpcStyle.fontSize}" font-weight="${tpcStyle.fontWeight}" fill="${tpcStyle.color}">
@@ -174,22 +186,23 @@ function PrimaryToSvg(primaryNode) {
       </text>
       ${tags}
   </g>`
+    }
   }
   svg += '</g>'
   return svg
 }
-
+/*
 function splitMultipleLineText() {
   const maxWidth = 800 // should minus padding
-  let text = ''
-  let textEl = document.createElement('span')
+  const text = ''
+  const textEl = document.createElement('span')
   textEl.style.cssText =
     'padding:0;margin:0;font-family:微软雅黑;font-size:18px;font-weight:bolder;'
   textEl.innerHTML = ''
-  let lines = []
+  const lines = []
   for (let i = 0; i < text.length; i++) {
     textEl.innerHTML += text[i]
-    let w = textEl.getBoundingClientRect().width
+    const w = textEl.getBoundingClientRect().width
     if (w > maxWidth) {
       lines.push(textEl.innerHTML)
       textEl.innerHTML = ''
@@ -197,18 +210,18 @@ function splitMultipleLineText() {
   }
   return lines
 }
-
+*/
 function getFileName() {
   return $d.querySelector('root > tpc').innerText
 }
-
+/*
 function customLinkTransform() {
-  let customLinks = $d.querySelector('.topiclinks').children
+  const customLinks = $d.querySelector('.topiclinks').children
   let resLinks = ''
   for (let i = 0; i < customLinks.length; i++) {
-    let customLink = customLinks[i].outerHTML
+    const customLink = customLinks[i].outerHTML
     let cnt = 0
-    let data = customLink.replace(/\d+(\.\d+)? /g, function (match) {
+    const data = customLink.replace(/\d+(\.\d+)? /g, function(match) {
       match = Number(match)
       console.log(match, svgWidth, svgHeight)
       let res
@@ -231,37 +244,37 @@ function customLinkTransform() {
   console.log(resLinks)
   return resLinks
 }
-
-export let exportSvg = function (instance, fileName) {
+*/
+export const exportSvg = function(instance, fileName) {
   if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)')
   initVar()
   $d = instance.container
-  let svgFile = generateSvgDom()
-  let dlUrl = URL.createObjectURL(
+  const svgFile = generateSvgDom()
+  const dlUrl = URL.createObjectURL(
     new Blob([head + svgFile.outerHTML.replace(/&nbsp;/g, ' ')])
   )
-  let a = document.createElement('a')
+  const a = document.createElement('a')
   a.href = dlUrl
   a.download = (fileName || getFileName()) + '.svg'
   a.click()
 }
 
-export let exportPng = async function (instance, fileName) {
+export const exportPng = async function(instance, fileName) {
   if (!instance) throw new Error('Mind-elixir instance is not presented. ---> exportSvg(instance, fileName)')
   initVar()
   $d = instance.container
-  let svgFile = generateSvgDom()
+  const svgFile = generateSvgDom()
   const canvas = document.createElement('canvas')
   canvas.style.display = 'none'
   const ctx = canvas.getContext('2d')
 
-  let v = await Canvg.fromString(
+  const v = await Canvg.fromString(
     ctx,
     head + svgFile.outerHTML.replace(/&nbsp;/g, ' ')
   )
   v.start()
-  let imgURL = canvas.toDataURL('image/png')
-  let a = document.createElement('a')
+  const imgURL = canvas.toDataURL('image/png')
+  const a = document.createElement('a')
   a.href = imgURL
   a.download = fileName || getFileName() + '.png'
   a.click()
